@@ -2,12 +2,6 @@ set(sources
         src/sploter.cpp
         src/sploter.h
         src/sploter_data.cpp
-
-#        examples/eplot.cpp
-#        examples/eplot.h
-#        examples/main.cpp
-#        examples/render_elements.cpp
-#        examples/render_elements.h
 )
 
 set(exe_sources

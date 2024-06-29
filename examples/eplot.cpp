@@ -43,7 +43,7 @@ namespace cycfi::elements
         vs.emplace_back(i * 1.0);
       }
       std::ostringstream ss;
-      ss << "sin(x) * " << 10*c;
+      ss << "sin(x) * " << 10 * c;
       plot_->plot(
           vs,
           [c](float x)
@@ -51,6 +51,29 @@ namespace cycfi::elements
             constexpr auto arc = static_cast<float>(3.1415 / 180);
             x *= arc;
             return std::sin(x) * 10 * static_cast<float>(c);
+          },
+          ss.str());
+    }
+  }
+
+  void eplot::plot_more()
+  {
+    for (int c = 1; c <= 3; ++c)
+    {
+      std::deque<float> vs;
+      for (int i = -500; i < 1'000; i++)
+      {
+        vs.emplace_back(i * 1.0);
+      }
+      std::ostringstream ss;
+      ss << "sin(x) * x * " <<  c;
+      plot_->plot(
+          vs,
+          [c](float x)
+          {
+            constexpr auto arc = static_cast<float>(3.1415 / 180);
+            x *= arc;
+            return std::sin(x)*x * static_cast<float>(c);
           },
           ss.str());
     }

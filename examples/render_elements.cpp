@@ -90,24 +90,27 @@ void render_elements::refresh_view()
   ctx_->view.refresh(ctx_->bounds);
 }
 
-constexpr cycfi::elements::color render_elements::get_color(irender::colors color)
+constexpr cycfi::elements::color render_elements::get_color(colors color)
 {
   namespace el = cycfi::elements;
   el::color cr = el::colors::white_smoke;
   switch (color)
   {
-    case irender::colors::BLACK: cr = el::colors::black; break;
-    case irender::colors::DARKGRAY: cr = el::colors::dark_slate_gray; break;
-    case irender::colors::LIGHTGRAY: cr = el::colors::light_gray.opacity(0.6); break;
-    case irender::colors::WHITE: cr = el::colors::white; break;
-    case irender::colors::RED: cr = el::colors::red; break;
-    case irender::colors::GREEN: cr = el::colors::green; break;
-    case irender::colors::YELLOW: cr = el::colors::yellow; break;
-    case irender::colors::BLUE: cr = el::colors::blue; break;
-    case irender::colors::CYAN: cr = el::colors::cyan; break;
-    case irender::colors::LIGHT_BLUE: cr = el::colors::light_blue.opacity(0.8); break;
-
-    default: break;
+    case colors::BLACK: cr = el::colors::black; break;
+    case colors::DARKGRAY: cr = el::colors::dark_slate_gray; break;
+    case colors::LIGHTGRAY: cr = el::colors::light_gray.opacity(0.6); break;
+    case colors::WHITE: cr = el::colors::white; break;
+    case colors::RED: cr = el::colors::red; break;
+    case colors::GREEN: cr = el::colors::green; break;
+    case colors::YELLOW: cr = el::colors::yellow; break;
+    case colors::BLUE: cr = el::colors::blue; break;
+    case colors::CYAN: cr = el::colors::cyan; break;
+    case colors::LIGHT_BLUE: cr = el::colors::light_blue.opacity(0.8); break;
+    case colors::BROWN: cr = el::colors::brown; break;
+    case colors::ORANGE: cr = el::colors::orange; break;
+    case colors::PINK: cr = el::colors::pink; break;
+    case colors::PURPLE: cr = el::colors::purple; break;
+    default:break;
   }
   return cr;
 }

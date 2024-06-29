@@ -193,17 +193,17 @@ namespace splot
 
   void sploter::draw_curves(irender *render)
   {
-    if (curves_.size() <= 0)
+    if (curves_.empty())
       return;
 
-    int margin = (x_r_ - x_ - 30) / curves_.size();
+    int margin = static_cast<int>(x_r_ - x_ - 30) / curves_.size();
     int index = 0;
     for (auto &[xs, ys, color, visible, name] : curves_)
     {
       ++index;
-      if (show_agend_)
+      if (show_legend_)
       {
-        // draw agend box
+        // draw legend box
         // select button
         std::array<float, 2> btn_x{ x_ + (index - 1) * margin - 30, x_ + (index - 1) * margin + 10 };
         std::array<float, 2> btn_y{ y_ - 20, y_ };
@@ -231,7 +231,7 @@ namespace splot
         {
           render->draw_text(x_ + (index - 1) * margin, y_ - 10, name.c_str());
         }
-        // agend colored line
+        // legend colored line
         render->move_to(x_ + (index - 1) * margin, y_ - 10);
         render->line_to(x_ + (index - 1) * margin - 20, y_ - 10);
         render->end_line_style();
@@ -244,7 +244,7 @@ namespace splot
       auto first = true;
       const auto it_x = xs.begin();
       const auto it_y = ys.begin();
-      for (int i = 0; i < xs.size(); ++i)
+      for (auto i = 0; i < xs.size(); ++i)
       {
         if (first)
         {
@@ -261,14 +261,11 @@ namespace splot
     }
   }
 
-  bool sploter::mouse_click(irender *render, float x, float y, bool down, mouse_key key)
+  bool sploter::mouse_click(irender *, float, float, const bool down, const mouse_key key)
   {
     if (key == mouse_key::left)
     {
-      if (down)
-        mouse_clicked_ = true;
-      else
-        mouse_clicked_ = false;
+      mouse_clicked_ = down;
     }
     return true;
   }
@@ -292,14 +289,14 @@ namespace splot
     return true;
   }
 
-  void sploter::plot(std::deque<float> xs, std::deque<float> ys, std::string_view name)
+  void sploter::plot(std::deque<float> xseries, std::deque<float> yseries, std::string_view name)
   {
-    curves_.emplace_back(std::move(xs), std::move(ys));
+    curves_.emplace_back(std::move(xseries), std::move(yseries), name);
     calc_limits();
   }
-  void sploter::plot(std::deque<float> xs, std::function<float(float)> func, std::string_view name)
+  void sploter::plot(std::deque<float> xseries, std::function<float(float)> func, std::string_view name)
   {
-    curves_.emplace_back(std::move(xs), func, name);
+    curves_.emplace_back(std::move(xseries), func, name);
     calc_limits();
   }
 }  // namespace splot

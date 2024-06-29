@@ -26,7 +26,12 @@ namespace splot
       WHITE,
       LIGHT_BLUE,
 
-      UNSET = -1
+      BROWN,
+      ORANGE,
+      PINK,
+      PURPLE,
+
+      UNSET = -1,
     };
 
     enum class alignments : int8_t
@@ -40,7 +45,12 @@ namespace splot
 
     virtual ~irender() = default;
 
-    virtual irender *init(const void *ctx) = 0;
+    /**
+     * !!! DO NOT try to destruct this context, it's just a reference. It should be fully managed outof this class!!!
+     * @param context reference of the draw context
+     * @return the render pointer
+     */
+    virtual irender *init(const void *context) = 0;
 
     virtual void set_bg_color(colors color) = 0;
 
@@ -50,11 +60,20 @@ namespace splot
 
     virtual void line_to(float x, float y) = 0;
 
-    // get render width , height
+    /**
+     *  get the width and height of the draw area
+     * @return width,height
+     */
     virtual std::tuple<float, float> get_size() = 0;
 
     virtual void draw_rect(float l_x, float l_y, float r_x, float r_y, bool fill, float radius) = 0;
 
+    /**
+     * begin pattern for line drawing,
+     * always remmber to envelop with a `end_line_style`
+     * @param width width of the next drawing line
+     * @param color color of the next drawing line
+     */
     virtual void begin_line_style(float width, irender::colors color) = 0;
 
     virtual void end_line_style() = 0;
@@ -67,8 +86,11 @@ namespace splot
 
     virtual void swap_buffer() = 0;
 
-    // using left top as orgin zero point and right bottom as maxium point of the canvas
-    // get left top right bottom
+    /**
+     * get left top right bottom
+     * using left top as orgin zero point and right bottom as maxium point of the canvas
+     * @return left,top,right,bottom
+     */
     virtual std::tuple<float, float, float, float> get_bounds() = 0;
 
     virtual void refresh_view() = 0;

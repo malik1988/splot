@@ -3,12 +3,29 @@ project(splot_example LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(splot_example
+#
+# Format the project using the `clang-format` target (i.e: cmake --build build --target clang-format)
+#
+set(sources
         main.cpp
         eplot.cpp
-        eplot.h
         render_elements.cpp
+)
+set(headers
+        eplot.h
         render_elements.h
+)
+
+
+add_clang_format_target()
+
+#
+# elements project settings
+#
+
+add_executable(splot_example
+        ${sources}
+        ${headers}
 )
 
 set(ELEMENTS_APP_PROJECT "splot-example")
@@ -18,7 +35,7 @@ set(ELEMENTS_APP_ID "com.malik.splotexample")
 set(ELEMENTS_APP_VERSION "1.0")
 
 set(ELEMENTS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../elements")
-set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${ELEMENTS_ROOT}/cmake")
+set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${ELEMENTS_ROOT}/cmake")
 
 include(ElementsConfigCommon)
 add_subdirectory(${ELEMENTS_ROOT} elements)
@@ -28,4 +45,5 @@ add_subdirectory(${ELEMENTS_ROOT} elements)
 include(AppIcon)
 include(ElementsConfigApp)
 
-target_link_libraries(splot_example cycfi::elements  splot::splot)
+target_link_libraries(splot_example cycfi::elements splot::splot)
+

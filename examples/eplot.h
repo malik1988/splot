@@ -26,6 +26,11 @@ namespace cycfi::elements
     bool cursor(context const &ctx, point p, cursor_tracking status) override;
 
     void plot();
+    void plot_more();
+
+   auto manipulator() const
+    {
+      return  plot_.get();}
 
    private:
     static constexpr point center(const rect &bounds)

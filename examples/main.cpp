@@ -14,13 +14,14 @@ int main(int argc, char* argv[])
   _win.on_close = [&_app]() { _app.stop(); };
 
   view view_(_win);
-  // std::deque<point> _points;
-  // constexpr auto per_arc=3.1415926/180;
-  // for (int i=0;i<10'000;i++) {
-  //     _points.emplace_back(static_cast<float>(i),static_cast<float>(std::sin(i*per_arc)*i ));
-  // }
+
   eplot _plot;
+  //clear some extra symbols to accelerate, will only effect after redraw cause manually.
+  _plot.manipulator()->with_axes_mark(false)->with_legend(true)->with_rect(false);
+  // add more curves
   _plot.plot();
+  // add more curves
+  _plot.plot_more();
   view_.content(link(_plot), background);
 
   _app.run();

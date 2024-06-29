@@ -17,22 +17,26 @@ namespace splot
   {
    public:
     sploter()
-        : show_grid_h_(true),
-          show_grid_v_(true),
-          show_axes_mark_(true),
-          show_agend_(true),
-          show_rect_(true),
-          x_min_(0),
-          x_max_(0),
-          y_min_(0),
-          y_max_(0),
-          axis_mark_len_(5),
-          x_scale_(1),
-          y_scale_(1),
-          x_(0),
-          y_(0),
-          x_r_(0),
-          y_b_(0)
+        : show_grid_h_{ true },
+          show_grid_v_{ true },
+          show_axes_mark_{ true },
+          show_legend_{ true },
+          show_rect_{ true },
+          cursor_over_{ false },
+          mouse_clicked_{ false },
+          x_min_{ 0 },
+          x_max_{ 0 },
+          y_min_{ 0 },
+          y_max_{ 0 },
+          axis_mark_len_{ 5.0 },
+          x_scale_{ 1 },
+          y_scale_{ 1 },
+          x_{ 0 },
+          y_{ 0 },
+          x_r_{ 0 },
+          y_b_{ 0 },
+          cursor_x_(0),
+          cursor_y_(0)
     {
     }
 
@@ -47,6 +51,32 @@ namespace splot
     void plot(std::deque<float> xs, std::deque<float> ys, std::string_view name) override;
 
     void plot(std::deque<float> xs, std::function<float(float)> func, std::string_view name) override;
+
+    isploter *with_grid_h(bool show) override
+    {
+      show_grid_h_ = show;
+      return this;
+    }
+    isploter *with_grid_v(bool show) override
+    {
+      show_grid_v_ = show;
+      return this;
+    }
+    isploter *with_axes_mark(bool show) override
+    {
+      show_axes_mark_ = show;
+      return this;
+    }
+    isploter *with_legend(bool show) override
+    {
+      show_legend_ = show;
+      return this;
+    }
+    isploter *with_rect(bool show) override
+    {
+      show_rect_ = show;
+      return this;
+    }
 
    private:
     std::pair<int, float> get_divisor(float min, float max, float len);
@@ -63,10 +93,13 @@ namespace splot
     {
       switch (index)
       {
-        case 1: return irender::colors::RED;
-        case 2: return irender::colors::GREEN;
-        case 3: return irender::colors::BLUE;
-        case 4: return irender::colors::DARKGRAY;
+        case 1: return irender::colors::BLUE;
+        case 2: return irender::colors::BROWN;
+        case 3: return irender::colors::ORANGE;
+        case 4: return irender::colors::PINK;
+        case 5: return irender::colors::GREEN;
+        case 6: return irender::colors::RED;
+        case 7: return irender::colors::PURPLE;
         default: return irender::colors::BLACK;
       }
     }
@@ -100,18 +133,17 @@ namespace splot
    private:
     bool show_grid_h_, show_grid_v_;
     bool show_axes_mark_;
-    bool show_agend_;
+    bool show_legend_;
     bool show_rect_;
     bool cursor_over_, mouse_clicked_;
 
-    // std::deque<float>
     std::vector<sploter_data> curves_;
     float x_min_, x_max_, y_min_, y_max_;
     float axis_mark_len_;
     float x_scale_, y_scale_;
     float x_, y_, x_r_, y_b_;
     float cursor_x_, cursor_y_;
-    const float chouia = 0.0001;
+    const float chouia = 0.0001f;
   };
 }  // namespace splot
 #endif  // XPLOTER_H

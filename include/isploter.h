@@ -32,15 +32,21 @@ namespace splot
 
     virtual ~isploter() = default;
 
-    virtual void draw(irender *render) = 0;
+    virtual void draw(irender* render) = 0;
 
-    virtual bool handle_events(irender *render, float x, float y, cursor_tracking tracking) = 0;
+    virtual bool handle_events(irender* render, float x, float y, cursor_tracking tracking) = 0;
 
-    virtual bool mouse_click(irender *render, float x, float y, bool down, mouse_key key) = 0;
+    virtual bool mouse_click(irender* render, float x, float y, bool down, mouse_key key) = 0;
 
     virtual void plot(std::deque<float> xseries, std::deque<float> yseries, std::string_view name) = 0;
 
     virtual void plot(std::deque<float> xseries, std::function<float(float)> func, std::string_view name) = 0;
+
+    virtual isploter* with_grid_h(bool show) = 0;
+    virtual isploter* with_grid_v(bool show) = 0;
+    virtual isploter* with_axes_mark(bool show) = 0;
+    virtual isploter* with_legend(bool show) = 0;
+    virtual isploter* with_rect(bool show) = 0;
   };
 
   /**

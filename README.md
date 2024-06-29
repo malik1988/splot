@@ -1,10 +1,11 @@
 # Splot
 
-![splot.jpg](screenshots/splot.jpg)
+a simple plotter for morden C++.
+
+![splot.jpg](screenshots/splot_demo.gif)
 
 Simple Plotter (Splot)
 ------
-This is simple plotter implement for C++.
 This is a very simple plotter module, providing a drawing interface and a low-level rendering interface.
 It can be easily ported to various UI platforms by implement the render API.
 
@@ -41,6 +42,8 @@ add link to splot library in cmake
 target_link_libraries(splot_example splot::splot)
 ```
 
+> more see the examples
+
 
 ## Examples
 
@@ -73,3 +76,11 @@ set(ELEMENTS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../elements")
 - x,y axes may grid may NOT divided by 10, it's intend to auto fix the data ranges. 
 Also try to make Zero(original XY) on the grid.
 - axes may adjust to the data ranges
+
+
+## TO DO 
+
+* [ ] make grid/legand/markers interactions available on screen
+* [ ] optimize axes grid division
+* [ ] port to FLTK 
+* [ ] port to nanogui 
