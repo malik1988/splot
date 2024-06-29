@@ -6,8 +6,8 @@
 
 #ifndef ISPLOTER_H
 #define ISPLOTER_H
+#include <deque>
 #include "irender.h"
-
 namespace splot
 {
   /**
@@ -49,9 +49,5 @@ namespace splot
     virtual isploter* with_rect(bool show) = 0;
   };
 
-  /**
-   * forward declare sploter derived from isploter
-   */
-  class sploter;
 }  // namespace splot
 #endif  // ISPLOTER_H

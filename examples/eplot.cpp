@@ -3,12 +3,10 @@
 //
 
 #include "eplot.h"
-
-#include "../src/sploter.h"
-
+#include "sploter_factory.h"
 namespace cycfi::elements
 {
-  eplot::eplot() : plot_{ std::make_unique<sploter>(sploter()) }, render_{ new render_elements() }
+  eplot::eplot() : plot_{ sploter_factory::create() }, render_{ new render_elements() }
   {
   }
   void eplot::draw(context const &ctx)
@@ -66,14 +64,14 @@ namespace cycfi::elements
         vs.emplace_back(i * 1.0);
       }
       std::ostringstream ss;
-      ss << "sin(x) * x * " <<  c;
+      ss << "sin(x) * x * " << c;
       plot_->plot(
           vs,
           [c](float x)
           {
             constexpr auto arc = static_cast<float>(3.1415 / 180);
             x *= arc;
-            return std::sin(x)*x * static_cast<float>(c);
+            return std::sin(x) * x * static_cast<float>(c);
           },
           ss.str());
     }

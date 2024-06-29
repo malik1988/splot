@@ -28,9 +28,10 @@ namespace cycfi::elements
     void plot();
     void plot_more();
 
-   auto manipulator() const
+    auto manipulator() const
     {
-      return  plot_.get();}
+      return plot_.get();
+    }
 
    private:
     static constexpr point center(const rect &bounds)

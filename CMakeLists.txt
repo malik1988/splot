@@ -95,7 +95,6 @@ else ()
             ${PROJECT_NAME}
             ${headers}
             ${sources}
-            src/sploter_data.cpp
     )
 
     if (${PROJECT_NAME}_VERBOSE_OUTPUT)

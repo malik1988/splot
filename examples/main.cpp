@@ -16,7 +16,7 @@ int main(int argc, char* argv[])
   view view_(_win);
 
   eplot _plot;
-  //clear some extra symbols to accelerate, will only effect after redraw cause manually.
+  // clear some extra symbols to accelerate, will only effect after redraw cause manually.
   _plot.manipulator()->with_axes_mark(false)->with_legend(true)->with_rect(false);
   // add more curves
   _plot.plot();
