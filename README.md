@@ -1,11 +1,15 @@
 # Splot
 
-a simple plotter for morden C++.
+a simple plotter for morden C++. 
+
+![multi_ranges.jpg](screenshots/multi_ranges.jpg)
 
 ![splot.jpg](screenshots/splot_demo.gif)
 
+Screen shots in `screenshots`.
+
 Simple Plotter (Splot)
-------
+--------
 This is a very simple plotter module, providing a drawing interface and a low-level rendering interface.
 It can be easily ported to various UI platforms by implement the render API.
 
@@ -14,6 +18,7 @@ irender.h  an An abstract API of render,please implement a render.
 isploter.h  the abstract interface of sploter
 sploter_data.h the interface of curves data.
 ```
+
 
 ## Usage
 
