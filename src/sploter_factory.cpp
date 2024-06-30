@@ -6,7 +6,8 @@
 #include "sploter.h"
 
 namespace splot {
-std::unique_ptr<isploter> sploter_factory::create() {
+std::unique_ptr<isploter> sploter_factory::create()
+{
     return std::make_unique<sploter>(sploter());
 }
-} // namespace splot
+}   // namespace splot

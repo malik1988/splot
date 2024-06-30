@@ -12,7 +12,8 @@
 #include "../include/sploter_data.h"
 
 namespace splot {
-class sploter final : public isploter {
+class sploter final : public isploter
+{
 public:
     sploter()
         : show_grid_h_{true}
@@ -34,47 +35,48 @@ public:
         , x_r_{0}
         , y_b_{0}
         , cursor_x_(0)
-        , cursor_y_(0) {}
+        , cursor_y_(0)
+    {}
 
     ~sploter() override;
 
     void draw(irender* render) override;
 
-    bool handle_events(
-        irender* render, float x, float y, cursor_tracking tracking) override;
+    bool handle_events(irender* render, float x, float y, cursor_tracking tracking) override;
 
-    bool mouse_click(
-        irender* render, float x, float y, bool down, mouse_key key) override;
+    bool mouse_click(irender* render, float x, float y, bool down, mouse_key key) override;
 
-    void plot(std::deque<float> xs, std::deque<float> ys, std::string_view name)
-        override;
+    void plot(std::deque<float> xs, std::deque<float> ys, std::string_view name) override;
 
-    void plot(
-        std::deque<float>           xs,
-        std::function<float(float)> func,
-        std::string_view            name) override;
+    void plot(std::deque<float> xs, std::function<float(float)> func,
+              std::string_view name) override;
 
-    isploter* with_grid_h(bool show) override {
+    isploter* with_grid_h(bool show) override
+    {
         show_grid_h_ = show;
         return this;
     }
 
-    isploter* with_grid_v(bool show) override {
+    isploter* with_grid_v(bool show) override
+    {
         show_grid_v_ = show;
         return this;
     }
 
-    isploter* with_axes_mark(bool show) override {
+    isploter* with_axes_mark(bool show) override
+    {
         show_axes_mark_ = show;
         return this;
     }
 
-    isploter* with_legend(bool show) override {
+    isploter* with_legend(bool show) override
+    {
         show_legend_ = show;
         return this;
     }
 
-    isploter* with_rect(bool show) override {
+    isploter* with_rect(bool show) override
+    {
         show_rect_ = show;
         return this;
     }
@@ -84,41 +86,30 @@ private:
 
     void draw_curves(irender* render);
 
-    constexpr irender::colors chose_color(int index) {
+    constexpr irender::colors chose_color(int index)
+    {
         switch (index) {
-            case 1:
-                return irender::colors::BLUE;
-            case 2:
-                return irender::colors::BROWN;
-            case 3:
-                return irender::colors::ORANGE;
-            case 4:
-                return irender::colors::PINK;
-            case 5:
-                return irender::colors::GREEN;
-            case 6:
-                return irender::colors::RED;
-            case 7:
-                return irender::colors::PURPLE;
-            default:
-                return irender::colors::BLACK;
+        case 1: return irender::colors::BLUE;
+        case 2: return irender::colors::BROWN;
+        case 3: return irender::colors::ORANGE;
+        case 4: return irender::colors::PINK;
+        case 5: return irender::colors::GREEN;
+        case 6: return irender::colors::RED;
+        case 7: return irender::colors::PURPLE;
+        default: return irender::colors::BLACK;
         }
     }
 
-    float X(float x) {
-        return (x - real_x_min_) / x_scale_;
-    }
+    float X(float x) { return (x - real_x_min_) / x_scale_; }
 
-    float Y(float y) {
-        return (y - real_y_min_) / y_scale_;
-    }
+    float Y(float y) { return (y - real_y_min_) / y_scale_; }
 
-    void calc_limits() {
+    void calc_limits()
+    {
         auto calc_min_max = [](const auto& values, auto& min, auto& max) {
-            auto [minv, maxv] =
-                std::minmax_element(values.begin(), values.end());
-            min = std::isnan(min) ? *minv : std::min(min, *minv),
-            max = std::isnan(max) ? *maxv : std::max(max, *maxv);
+            auto [minv, maxv] = std::minmax_element(values.begin(), values.end());
+            min               = std::isnan(min) ? *minv : std::min(min, *minv),
+            max               = std::isnan(max) ? *maxv : std::max(max, *maxv);
         };
         for (const auto& curve : curves_) {
             // get x min and max
@@ -128,8 +119,7 @@ private:
         }
     }
 
-    std::tuple<float, float, float, float>
-        calc_range(float min, float max, float len);
+    std::tuple<float, float, float, float> calc_range(float min, float max, float len);
 
 private:
     bool show_grid_h_, show_grid_v_;
@@ -148,5 +138,5 @@ private:
 
     // std::vector<curve_area> curves_area_;
 };
-} // namespace splot
-#endif // XPLOTER_H
+}   // namespace splot
+#endif   // XPLOTER_H

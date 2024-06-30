@@ -4,24 +4,23 @@
 
 #pragma once
 #ifndef SPLOTER_DATA_H
-#define SPLOTER_DATA_H
-#include <deque>
-#include <functional>
+#    define SPLOTER_DATA_H
+#    include <deque>
+#    include <functional>
 
-#include "irender.h"
+#    include "irender.h"
 
 namespace splot {
-struct sploter_data {
+struct sploter_data
+{
     /**
      *  plot data, generate curves acording to func function, like sin(x)+x*x
      * @param xseries
      * @param func function, like sin(x)+x*x
      * @param name curve name, empty will auto generate by index
      */
-    explicit sploter_data(
-        std::deque<float>&&         xseries,
-        std::function<float(float)> func,
-        std::string_view            name = "");
+    explicit sploter_data(std::deque<float>&& xseries, std::function<float(float)> func,
+                          std::string_view name = "");
 
     /**
      *  plot data, by assgin x and y series
@@ -29,10 +28,8 @@ struct sploter_data {
      * @param yseries
      * @param name curve name, empty will auto generate by index
      */
-    explicit sploter_data(
-        std::deque<float>&& xseries,
-        std::deque<float>&& yseries,
-        std::string_view    name = "");
+    explicit sploter_data(std::deque<float>&& xseries, std::deque<float>&& yseries,
+                          std::string_view name = "");
 
     std::deque<float> x;
     std::deque<float> y;
@@ -40,7 +37,8 @@ struct sploter_data {
     bool              visible;
     std::string       name;
 
-    struct curve_area {
+    struct curve_area
+    {
         float x, y, xr, yb;
         bool  visible;
     };
@@ -51,5 +49,5 @@ struct sploter_data {
      */
     curve_area area;
 };
-} // namespace splot
-#endif // SPLOTER_DATA_H
+}   // namespace splot
+#endif   // SPLOTER_DATA_H

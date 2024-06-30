@@ -4,14 +4,15 @@
 #pragma once
 
 #ifndef SPLOTER_FACTORY_H
-#define SPLOTER_FACTORY_H
+#    define SPLOTER_FACTORY_H
 
-#include "isploter.h"
+#    include "isploter.h"
 
 namespace splot {
-struct sploter_factory {
+struct sploter_factory
+{
     static std::unique_ptr<isploter> create();
 };
 
-} // namespace splot
-#endif // SPLOTER_FACTORY_H
+}   // namespace splot
+#endif   // SPLOTER_FACTORY_H

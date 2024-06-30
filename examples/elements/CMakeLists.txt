@@ -1,5 +1,6 @@
-cmake_minimum_required(VERSION 3.28)
-project(splot_example LANGUAGES C CXX)
+cmake_minimum_required(VERSION 3.15)
+project(splot_elements
+        LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
 
@@ -23,7 +24,7 @@ add_clang_format_target()
 # elements project settings
 #
 
-add_executable(splot_example
+add_executable(splot_elements
         ${sources}
         ${headers}
 )
@@ -34,7 +35,7 @@ set(ELEMENTS_APP_COPYRIGHT "Copyright (c) 2024 Malik")
 set(ELEMENTS_APP_ID "com.malik.splotexample")
 set(ELEMENTS_APP_VERSION "1.0")
 
-set(ELEMENTS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../elements")
+set(ELEMENTS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../../elements")
 set(CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${ELEMENTS_ROOT}/cmake")
 
 include(ElementsConfigCommon)
@@ -45,5 +46,5 @@ add_subdirectory(${ELEMENTS_ROOT} elements)
 include(AppIcon)
 include(ElementsConfigApp)
 
-target_link_libraries(splot_example cycfi::elements splot::splot)
+target_link_libraries(splot_elements cycfi::elements splot::splot)
 
