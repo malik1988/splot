@@ -18,7 +18,11 @@ sploter_data.h the interface of curves data.
 ## Usage
 
 1. implement the `irender` API
-2. init `std::unique_ptr<isploter> plot_` with a `std::make_unique<sploter>(sploter())` pointer instance.
+  > !! Note !!
+  - render origin should be left-top
+  - render x increase from left to right
+  - render y increase from top to bottom
+2. init `std::unique_ptr<isploter> plot_` with a `sploter_factory::create()` pointer instance.
 2. call ` plot_->draw(render_->init(&ctx));` in the UI `draw(ctx)` function.
 3. call `handle_events` and `mouse_click`.
 4. run and show the UI!

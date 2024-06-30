@@ -108,7 +108,7 @@ constexpr cycfi::elements::color render_elements::get_color(colors color)
     case colors::LIGHT_BLUE: cr = el::colors::light_blue.opacity(0.8); break;
     case colors::BROWN: cr = el::colors::brown; break;
     case colors::ORANGE: cr = el::colors::orange; break;
-    case colors::PINK: cr = el::colors::pink; break;
+    case colors::PINK: cr = el::colors::deep_pink; break;
     case colors::PURPLE: cr = el::colors::purple; break;
     default: break;
   }

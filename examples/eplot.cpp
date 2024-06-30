@@ -33,15 +33,15 @@ namespace cycfi::elements
 
   void eplot::plot()
   {
-    for (int c = 1; c <= 3; ++c)
+    for (int c = 1; c <=3; ++c)
     {
       std::deque<float> vs;
-      for (int i = -500; i < 1'000; i++)
+      for (int i = 100; i < 1'000; i++)
       {
         vs.emplace_back(i * 1.0);
       }
       std::ostringstream ss;
-      ss << "sin(x) * " << 10 * c;
+      ss  << 10 * c<< "sin(x)";
       plot_->plot(
           vs,
           [c](float x)
@@ -64,7 +64,7 @@ namespace cycfi::elements
         vs.emplace_back(i * 1.0);
       }
       std::ostringstream ss;
-      ss << "sin(x) * x * " << c;
+      ss  << c<< "xsin(x)";
       plot_->plot(
           vs,
           [c](float x)

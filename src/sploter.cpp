@@ -20,59 +20,6 @@ namespace splot
     render->swap_buffer();
   }
 
-  std::pair<int, float> sploter::get_divisor(float min, float max, float len)
-  {
-    int div = 10;
-    float smaller = 0;
-    float scale = 1;
-    // there are positive and negetive values,try adjust zero to the grid
-    if (min < 0 && max > 0)
-    {
-      smaller = max < (-min) ? max : -min;
-      const float total = max - min;
-      div = static_cast<int>(std::ceil(total / smaller));
-      scale = (smaller * div) / len;
-    }
-    else
-    {
-      const float total = max - min;
-      auto abs_max = std::max(std::abs(min), std::abs(max));
-      // div = static_cast<int>(std::ceil(abs_max / static_cast<int>(abs_max / 10)));
-      scale = abs_max / len;
-    }
-
-    while (div < 10)
-      div *= 2;
-    // change to odd
-    return { div, scale };
-  }
-
-  constexpr void sploter::calc_scales(float width, float height)
-  {
-    // set default to 1.0f
-    x_scale_ = 1.0f, y_scale_ = 1.0f;
-    if (0 != x_max_)
-      x_scale_ = std::abs(x_max_ - x_min_) / width;
-    if (0 != y_max_)
-      y_scale_ = std::abs(y_max_ - y_min_) / height;
-  }
-
-  std::pair<float, float> sploter::calc_zeros(float width, float x_divs, float x, float height, float y_divs, float y_b)
-  {
-    float y_zero = 0, x_zero = x;
-    if (y_min_ < 0)
-    {
-      auto i = -y_min_ / (height * y_scale_ / y_divs);
-      y_zero = y_b - height / y_divs * i;
-    }
-    if (x_min_ < 0)
-    {
-      auto i = -x_min_ / (width * x_scale_ / x_divs);
-      x_zero = x + width / x_divs * i;
-    }
-    return { x_zero, y_zero };
-  }
-
   void sploter::draw_axes(irender *render)
   {
     // draw rectangle
@@ -92,29 +39,28 @@ namespace splot
 
     const auto width = x_r > x ? x_r - x : x - x_r;
     const auto height = y_b > y ? y_b - y : y - y_b;
-    // calc_scales(width, height);
 
-    auto [x_divs, scale_x] = get_divisor(x_min_, x_max_, width);
-    x_scale_ = scale_x;
-    auto [y_divs, scale_y] = get_divisor(y_min_, y_max_, height);
-    y_scale_ = scale_y;
-    // draw grid
+    auto [y_divs, y_real_min, y_zero_offset, y_scale] = calc_range(y_min_, y_max_, height);
+    y_scale_ = y_scale;
+    real_y_min_ = y_real_min;
+    auto [x_divs, x_real_min, x_zero_offset, x_scale] = calc_range(x_min_, x_max_, width);
+    x_scale_ = x_scale;
+    real_x_min_ = x_real_min;
+
     if (show_grid_h_ || show_grid_v_)
     {
       render->begin_line_style(1, irender::colors::LIGHTGRAY);
       if (show_grid_h_)
-      {
-        // horizotal grid
-        for (int i = y_divs - 1; i > 0; --i)
+      {  // horizotal grid
+        for (int i = (int)y_divs - 1; i > 0; --i)
         {
           render->move_to(x, y + float(height * i) / y_divs);
           render->line_to(x_r, y + float(height * i) / y_divs);
         }
       }
       if (show_grid_v_)
-      {
-        // vertical grid
-        for (int i = x_divs - 1; i > 0; --i)
+      {  // vertical grid
+        for (int i = (int)x_divs - 1; i > 0; --i)
         {
           render->move_to(x + float(width * i) / x_divs, y);
           render->line_to(x + float(width * i) / x_divs, y_b);
@@ -122,8 +68,9 @@ namespace splot
       }
       render->end_line_style();
     }
-    auto [x_zero, y_zero] = calc_zeros(width, x_divs, x, height, y_divs, y_b);
 
+    auto y_zero = y_b + y_zero_offset / y_scale;
+    auto x_zero = x - x_zero_offset / x_scale;
     // draw axis x and y
     {
       render->begin_line_style(1, irender::colors::BLACK);
@@ -139,55 +86,57 @@ namespace splot
     if (show_axes_mark_)
     {
       // draw axes markers
-      render->begin_line_style(1, irender::colors::DARKGRAY);
-
-      // y axis markers
-      for (int i = y_divs - 1; i > 0; --i)
       {
-        render->move_to(x_zero, y + height * i / y_divs);
-        render->line_to(x_zero + axis_mark_len_, y + height * i / y_divs);
-        render->move_to(x_zero, y + height * i / y_divs);
-        render->line_to(x_zero - axis_mark_len_, y + height * i / y_divs);
-        // std::cout << height << " x: " << x << " y: " << y + float(height * i) / y_divs << "  \n";
-      }
-      // x axis markers
-      for (int i = x_divs - 1; i > 0; --i)
-      {
-        render->move_to(x + width * i / x_divs, y_zero);
-        render->line_to(x + width * i / x_divs, y_zero + axis_mark_len_);
-        render->move_to(x + width * i / x_divs, y_zero);
-        render->line_to(x + width * i / x_divs, y_zero - axis_mark_len_);
-      }
-      render->end_line_style();
+        render->begin_line_style(1, irender::colors::DARKGRAY);
 
-      render->set_text_style(10, irender::colors::BLACK);
-      // horizotal right ,vertical center
-      render->set_text_justify(0, 0);
-      // y axis numbers
-      for (int i = 0; i <= y_divs; ++i)
-      {
-        auto val = y_min_ + height * y_scale_ / y_divs * i;
-        if (std::fabs(val) < chouia * (y_max_ - y_min_))
-          val = 0;
-
-        std::ostringstream text;
-        text << std::fixed << std::setprecision(1) << val;
-        render->draw_text(x_zero - margin, y_b - height / y_divs * i, text.str().c_str());
+        // y axis markers
+        for (int i = y_divs - 1; i > 0; --i)
+        {
+          render->move_to(x_zero, y + height * i / y_divs);
+          render->line_to(x_zero + axis_mark_len_, y + height * i / y_divs);
+          render->move_to(x_zero, y + height * i / y_divs);
+          render->line_to(x_zero - axis_mark_len_, y + height * i / y_divs);
+          // std::cout << height << " x: " << x << " y: " << y + float(height * i) / y_divs << "  \n";
+        }
+        // x axis markers
+        for (int i = x_divs - 1; i > 0; --i)
+        {
+          render->move_to(x + width * i / x_divs, y_zero);
+          render->line_to(x + width * i / x_divs, y_zero + axis_mark_len_);
+          render->move_to(x + width * i / x_divs, y_zero);
+          render->line_to(x + width * i / x_divs, y_zero - axis_mark_len_);
+        }
+        render->end_line_style();
       }
-      // y zero not at the bottom,try move x axis to the y_zero position
-
-      // x axis numbers
-      render->set_text_justify(0, 0);
-      for (int i = 0; i <= x_divs; ++i)
+      //------
+      // axis numbers
       {
-        auto val = x_min_ + width * x_scale_ / x_divs * i;
-        if (std::fabs(val) < chouia * (x_max_ - x_min_))
-          val = 0;
-        std::ostringstream text;
-        text << std::fixed << std::setprecision(1) << val;
-        render->draw_text(x + width / x_divs * i, y_zero + (margin / 2), text.str().c_str());
+        render->set_text_style(10, irender::colors::BLACK);
+        // horizotal right ,vertical center
+        render->set_text_justify(0, 0);
+        // y axis numbers
+        for (int i = 0; i <= y_divs; ++i)
+        {
+          auto val = y_real_min + height * y_scale_ / y_divs * i;
+
+          std::ostringstream text;
+          text << std::fixed << std::setprecision(1) << val;
+          render->draw_text(x_zero - margin, y_b - height / y_divs * i, text.str().c_str());
+        }
+        // y zero not at the bottom,try move x axis to the y_zero position
+
+        // x axis numbers
+        render->set_text_justify(0, 0);
+        for (int i = 0; i <= x_divs; ++i)
+        {
+          auto val = x_real_min + width * x_scale_ / x_divs * i;
+
+          std::ostringstream text;
+          text << std::fixed << std::setprecision(1) << val;
+          render->draw_text(x + width / x_divs * i, y_zero + (margin / 2), text.str().c_str());
+        }
+        render->end_line_style();
       }
-      render->end_line_style();
     }
   }
 
@@ -195,8 +144,9 @@ namespace splot
   {
     if (curves_.empty())
       return;
-
-    int margin = static_cast<int>(x_r_ - x_ - 30) / curves_.size();
+    constexpr float padding=15;
+    constexpr float button_size=40;
+    int margin = static_cast<int>(x_r_ - x_) / curves_.size();
     int index = 0;
     for (auto &[xs, ys, color, visible, name] : curves_)
     {
@@ -205,16 +155,20 @@ namespace splot
       {
         // draw legend box
         // select button
-        std::array<float, 2> btn_x{ x_ + (index - 1) * margin - 30, x_ + (index - 1) * margin + 10 };
-        std::array<float, 2> btn_y{ y_ - 20, y_ };
-        if (cursor_over_ && (cursor_x_ >= btn_x[0] && cursor_x_ <= btn_x[1] + 20) &&
-            (cursor_y_ >= btn_y[0] && cursor_y_ <= btn_y[1]))
+        auto [btn_x, btn_x_r, btn_y, btn_y_b] = std::tuple<float, float, float, float>{
+          x_ + padding+ (index - 1) * margin ,
+          x_ +padding+button_size+ (index - 1) * margin ,
+          y_ - padding,
+          y_
+        };
+        if (cursor_over_ && (cursor_x_ >= btn_x && cursor_x_ <= btn_x_r + 20) &&
+            (cursor_y_ >= btn_y && cursor_y_ <= btn_y_b))
         {
           if (mouse_clicked_)
             visible = !visible;
 
           render->set_bg_color(irender::colors::LIGHT_BLUE);
-          render->draw_rect(btn_x[0], btn_y[0], btn_x[1], btn_y[1], true, 5.0f);
+          render->draw_rect(btn_x,btn_y,btn_x_r,btn_y_b, true, 5.0f);
         }
 
         render->begin_line_style(2, visible ? chose_color(index) : irender::colors::DARKGRAY);
@@ -225,15 +179,15 @@ namespace splot
           // set name to default "curve i"
           std::stringstream ss;
           ss << "curve" << index;
-          render->draw_text(x_ + (index - 1) * margin, y_ - 10, ss.str().c_str());
+          render->draw_text(x_+padding + (index - 1) * margin, y_-padding, ss.str().c_str());
         }
         else
         {
-          render->draw_text(x_ + (index - 1) * margin, y_ - 10, name.c_str());
+          render->draw_text(x_+padding + (index - 1) * margin, y_ -padding, name.c_str());
         }
         // legend colored line
-        render->move_to(x_ + (index - 1) * margin, y_ - 10);
-        render->line_to(x_ + (index - 1) * margin - 20, y_ - 10);
+        render->move_to(x_ +padding+ (index - 1) * margin, y_ -padding+5);
+        render->line_to(x_ +padding+button_size+ (index - 1) * margin, y_ -padding+ 5);
         render->end_line_style();
       }
       if (!visible)
@@ -298,5 +252,98 @@ namespace splot
   {
     curves_.emplace_back(std::move(xseries), func, name);
     calc_limits();
+  }
+
+  std::tuple<float, float, float, float> sploter::calc_range(float min, float max, float len)
+  {
+    auto min10 = [](float x)
+    {
+      auto c10 = std::log10(std::abs(x));
+      auto p10 = std::pow(10, c10 - 1);
+      if (x == 0)
+      {
+        return 0.0F;
+      }
+      if (x > 0)
+      {
+        return static_cast<float>(std::floor(x / p10) * p10);
+      }
+      return static_cast<float>(-std::ceil(-x / p10) * p10);
+    };
+
+    auto max10 = [](float x)
+    {
+      auto c10 = std::log10(std::abs(x));
+      auto p10 = std::pow(10, c10 - 1);
+      if (x == 0)
+      {
+        return 0.0F;
+      }
+      if (x > 0)
+      {
+        return static_cast<float>(std::ceil(x / p10) * p10);
+      }
+      return static_cast<float>(-std::floor(-x / p10) * p10);
+    };
+
+    auto v_max10 = max10(max);
+    auto v_min10 = min10(min);
+    auto v_range = v_max10 - v_min10;
+    constexpr auto c_div = 10;
+    auto v_div = v_range / c_div;
+    float real_v_div = v_div;
+    if (v_div > 10)
+    {
+      real_v_div = std::ceil(v_div / 10) * 10;
+    }
+    else if (v_div > 5)
+    {
+      real_v_div = std::ceil(v_div / 5) * 5;
+    }
+    else if (v_div > 2)
+    {
+      real_v_div = std::ceil(v_div / 5) * 5;
+    }
+    else if (v_div > 1)
+    {
+      real_v_div = std::ceil(v_div);
+    }
+
+    float real_c_total, real_len, scale, real_min, zero_offset;
+    if (min < 0 && max > 0)
+    {
+      auto real_c_max = std::ceil(std::abs(max) / real_v_div);
+      auto real_c_min = std::ceil(std::abs(min) / real_v_div);
+      real_c_total = real_c_max + real_c_min;
+      real_min = -real_c_min * real_v_div;
+
+      real_len = real_v_div * real_c_total;
+      scale = real_len / len;
+      zero_offset = real_min;
+    }
+    else if (max <= 0)
+    {  // all negetive values
+      auto real_c_max = std::floor(-max / real_v_div);
+      auto real_c_min = std::ceil(-min / real_v_div);
+      real_c_total = std::abs(real_c_max - real_c_min);
+      real_min = -real_c_min * real_v_div;
+
+      real_len = real_v_div * real_c_total;
+      scale = real_len / len;
+      zero_offset = -real_c_min;
+    }
+    else
+    {  // all postive values
+      auto real_c_max = std::ceil(max / real_v_div);
+      auto real_c_min = std::floor(min / real_v_div);
+      real_c_total = std::abs(real_c_max - real_c_min);
+      real_min = real_c_min * real_v_div;
+
+      real_len = real_v_div * real_c_total;
+      scale = real_len / len;
+      zero_offset = real_c_min;
+    }
+
+    return { real_c_total, real_min, zero_offset, scale };
   }
 }  // namespace splot
