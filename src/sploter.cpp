@@ -34,8 +34,15 @@ void sploter::draw_axes(irender* render)
     // save plot area points
     x_ = x, y_ = y, x_r_ = x_r, y_b_ = y_b;
 
-    if (show_rect_) render->draw_rect(x, y, x_r, y_b, false, 0);
-
+    if (show_rect_) {
+        render->set_fg_color(irender::colors::LIGHTGRAY);
+        render->draw_rect(x, y, x_r, y_b, false, 0);
+    }
+    //empty curves draw a warning text
+    if (curves_.empty()) {
+        draw_empty_text(render);
+        return;
+    }
     const auto width  = x_r > x ? x_r - x : x - x_r;
     const auto height = y_b > y ? y_b - y : y - y_b;
 
@@ -45,7 +52,8 @@ void sploter::draw_axes(irender* render)
     auto [x_divs, x_real_min, x_zero_offset, x_scale] = calc_range(x_min_, x_max_, width);
     x_scale_                                          = x_scale;
     real_x_min_                                       = x_real_min;
-
+    auto y_zero                                       = y_b + y_zero_offset / y_scale;
+    auto x_zero                                       = x - x_zero_offset / x_scale;
     if (show_grid_h_ || show_grid_v_) {
         render->begin_line_style(1, irender::colors::LIGHTGRAY);
         if (show_grid_h_) {   // horizotal grid
@@ -63,8 +71,7 @@ void sploter::draw_axes(irender* render)
         render->end_line_style();
     }
 
-    auto y_zero = y_b + y_zero_offset / y_scale;
-    auto x_zero = x - x_zero_offset / x_scale;
+
     // draw axis x and y
     {
         render->begin_line_style(1, irender::colors::BLACK);
@@ -332,5 +339,11 @@ std::tuple<float, float, float, float> sploter::calc_range(float min, float max,
     }
 
     return {real_c_total, real_min, zero_offset, scale};
+}
+void sploter::draw_empty_text(irender* render)
+{
+    render->set_text_style(20, irender::colors::RED);
+    render->draw_text(x_, y_, "!!NO Data To Plot!!");
+    render->end_line_style();
 }
 }   // namespace splot

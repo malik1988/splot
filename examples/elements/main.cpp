@@ -17,11 +17,17 @@ int  main(int argc, char* argv[])
 
     eplot _plot;
     // clear some extra symbols to accelerate, will only effect after redraw cause manually.
-    _plot.manipulator()->with_axes_mark(true)->with_legend(true)->with_rect(false);
+    _plot
+        .manipulator()
+        // ->with_axes_mark(false)
+        // ->with_grid_h(false)
+        // ->with_grid_v(false)
+        ->with_rect(true)
+        ->with_legend(true);
     // add more curves
-    _plot.plot();
-    // add more curves
-    _plot.plot_more();
+    // _plot.plot();
+    // // add more curves
+    // _plot.plot_more();
     view_.content(link(_plot), background);
 
     _app.run();

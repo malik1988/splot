@@ -75,8 +75,8 @@ void render_elements::end_line_style()
 
 std::tuple<float, float, float, float> render_elements::get_bounds()
 {
-    auto [x, y, h, w] = ctx_->bounds;
-    return std::make_tuple(x, y, h, w);
+    auto [x, y, r, b] = ctx_->bounds;
+    return std::make_tuple(x, y, r, b);
 }
 
 void render_elements::refresh_view()

@@ -5,13 +5,15 @@
 #pragma once
 
 #ifndef IRENDER_H
-#define IRENDER_H
-#include <tuple>
+#    define IRENDER_H
+#    include <tuple>
 
 namespace splot {
-class irender {
+class irender
+{
 public:
-    enum class colors : int8_t {
+    enum class colors : int8_t
+    {
         BLACK,
         BLUE,
         CYAN,
@@ -31,7 +33,8 @@ public:
         UNSET = -1,
     };
 
-    enum class alignments : int8_t {
+    enum class alignments : int8_t
+    {
         LEFT,
         CENTER,
         RIGHT,
@@ -63,13 +66,7 @@ public:
      */
     virtual std::tuple<float, float> get_size() = 0;
 
-    virtual void draw_rect(
-        float l_x,
-        float l_y,
-        float r_x,
-        float r_y,
-        bool  fill,
-        float radius) = 0;
+    virtual void draw_rect(float l_x, float l_y, float r_x, float r_y, bool fill, float radius) = 0;
 
     /**
      * begin pattern for line drawing,
@@ -99,5 +96,5 @@ public:
 
     virtual void refresh_view() = 0;
 };
-} // namespace splot
-#endif // IRENDER_H
+}   // namespace splot
+#endif   // IRENDER_H

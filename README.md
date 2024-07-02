@@ -4,9 +4,9 @@ a simple plotter for morden C++.
 
 ![multi_ranges.jpg](screenshots/multi_ranges.jpg)
 
-![splot.jpg](screenshots/splot_demo.gif)
+![demo.gif](screenshots/splot_demo.gif)
 
-Screen shots in `screenshots`.
+more shots in `screenshots`.
 
 Simple Plotter (Splot)
 --------
@@ -82,14 +82,14 @@ set(ELEMENTS_ROOT "${CMAKE_CURRENT_SOURCE_DIR}/../../elements")
 
 ## Know Behaviors 
 
-- x,y axes may grid may NOT divided by 10, it's intend to auto fix the data ranges. 
+- x,y axes grid may NOT divided by 10, it's intend to auto fix the data ranges. 
 Also try to make Zero(original XY) on the grid.
 - axes may adjust to the data ranges
 
 
 ## TO DO 
 
-* [ ] make grid/legand/markers interactions available on screen
-* [ ] optimize axes grid division
-* [ ] port to FLTK 
+* [x] optimize axes grid division
+* [x] port to FLTK 
 * [ ] port to nanogui 
+* [ ] make grid/legand/markers interactions available on screen
