@@ -25,9 +25,9 @@ int  main(int argc, char* argv[])
         ->with_rect(true)
         ->with_legend(true);
     // add more curves
-    _plot.plot();
-    // add more curves
-    _plot.plot_more();
+    // _plot.plot();
+    // // add more curves
+    // _plot.plot_more();
     view_.content(link(_plot), background);
 
     _app.run();

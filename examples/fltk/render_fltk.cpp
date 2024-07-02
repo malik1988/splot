@@ -76,6 +76,7 @@ void render_fltk::begin_line_style(float width, irender::colors color)
 
 void render_fltk::set_text_style(float font_size, irender::colors color)
 {
+    set_fg_color(color);
     fl_font(font_, static_cast<Fl_Fontsize>(font_size));
 }
 

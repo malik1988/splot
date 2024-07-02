@@ -13,6 +13,7 @@ sploter_data::sploter_data(std::deque<float>&& xs, std::function<float(float)> f
     , color{irender::colors::UNSET}
     , visible{true}
     , name{name}
+    , area{0.0, 0.0, 0.0, 0.0, false}
 {
     y.resize(x.size());
     std::transform(x.begin(), x.end(), y.begin(), std::move(func));
@@ -24,5 +25,6 @@ sploter_data::sploter_data(std::deque<float>&& xs, std::deque<float>&& ys, std::
     , name{name}
     , x{xs}
     , y{ys}
+    , area{0.0, 0.0, 0.0, 0.0, false}
 {}
 }   // namespace splot

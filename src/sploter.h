@@ -20,7 +20,7 @@ public:
         , show_grid_v_{true}
         , show_axes_mark_{true}
         , show_legend_{true}
-        , show_rect_{true}
+        , show_rect_{false}
         , cursor_over_{false}
         , mouse_clicked_{false}
         , x_min_{std::numeric_limits<float>::quiet_NaN()}
@@ -120,6 +120,7 @@ private:
     }
 
     std::tuple<float, float, float, float> calc_range(float min, float max, float len);
+    void                                   draw_empty_text(irender* render);
 
 private:
     bool show_grid_h_, show_grid_v_;

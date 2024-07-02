@@ -38,7 +38,11 @@ void sploter::draw_axes(irender* render)
         render->set_fg_color(irender::colors::LIGHTGRAY);
         render->draw_rect(x, y, x_r, y_b, false, 0);
     }
-
+    //empty curves draw a warning text
+    if (curves_.empty()) {
+        draw_empty_text(render);
+        return;
+    }
     const auto width  = x_r > x ? x_r - x : x - x_r;
     const auto height = y_b > y ? y_b - y : y - y_b;
 
@@ -335,5 +339,11 @@ std::tuple<float, float, float, float> sploter::calc_range(float min, float max,
     }
 
     return {real_c_total, real_min, zero_offset, scale};
+}
+void sploter::draw_empty_text(irender* render)
+{
+    render->set_text_style(20, irender::colors::RED);
+    render->draw_text(x_, y_, "!!NO Data To Plot!!");
+    render->end_line_style();
 }
 }   // namespace splot
