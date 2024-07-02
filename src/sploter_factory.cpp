@@ -8,6 +8,6 @@
 namespace splot {
 std::unique_ptr<isploter> sploter_factory::create()
 {
-    return std::make_unique<sploter>(sploter());
+    return std::make_unique<sploter>();
 }
 }   // namespace splot

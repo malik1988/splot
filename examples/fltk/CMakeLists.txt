@@ -11,9 +11,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(sources
         main.cpp
         render_fltk.cpp
+        fplot.cpp
 )
 set(headers
-        plot_fltk.h
+        fplot.h
         render_fltk.h
 )
 

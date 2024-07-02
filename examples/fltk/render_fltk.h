@@ -14,16 +14,16 @@ using namespace splot;
 class render_fltk final : public irender
 {
 public:
-    explicit render_fltk(int x, int y, int w, int h)
-        : x_{x}
-        , y_{y}
-        , w_{w}
-        , h_{h}
-    {}
+    // explicit render_fltk(int x, int y, int w, int h)
+    //     : x_{x}
+    //     , y_{y}
+    //     , w_{w}
+    //     , h_{h}
+    // {}
 
     ~render_fltk() override;
 
-    irender* init(const void* ctx) override { return this; }
+    irender* init(const void* ctx) override;
 
     void set_bg_color(irender::colors color) override;
 
@@ -57,6 +57,13 @@ private:
     constexpr Fl_Color get_color(irender::colors color);
     int                last_x_, last_y_;
     int                x_, y_, w_, h_;
+    Fl_Color           last_color_;
+    Fl_Widget*         parent_;
+    Fl_Font            font_;
 };
 
+struct render_context
+{
+    int x, y, w, h;
+};
 #endif   // RENDER_FLTK_H

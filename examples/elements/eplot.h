@@ -4,12 +4,12 @@
 #pragma once
 
 #ifndef EPLOT_H
-#define EPLOT_H
+#    define EPLOT_H
 
-#include <elements.hpp>
+#    include <elements.hpp>
 
-#include "isploter.h"
-#include "render_elements.h"
+#    include "isploter.h"
+#    include "render_elements.h"
 
 using namespace splot;
 namespace cycfi::elements {

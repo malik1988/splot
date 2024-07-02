@@ -2,27 +2,44 @@
 // Created by Malik on 2024/6/22.
 //
 #include "render_fltk.h"
+
+#include "FL/forms.H"
+
 #include <FL/fl_draw.H>
 
 render_fltk::~render_fltk() = default;
+irender* render_fltk::init(const void* context)
+{
+    auto ctx = (render_context*)(context);
+    x_       = ctx->x;
+    y_       = ctx->y;
+    w_       = ctx->w;
+    h_       = ctx->h;
+    return this;
+}
 
 void render_fltk::set_bg_color(irender::colors color)
 {
-    fl_color(get_color(color));
+    last_color_ = get_color(color);
+    fl_color(last_color_);
 }
 
-void render_fltk::set_fg_color(irender::colors color) {}
+void render_fltk::set_fg_color(irender::colors color)
+{
+    last_color_ = get_color(color);
+    fl_color(last_color_);
+}
 
 void render_fltk::move_to(float x, float y)
 {
-    fl_line(last_x_, last_y_, last_x_, last_y_);
+    last_x_ = static_cast<int>(x), last_y_ = static_cast<int>(y);
 }
 
 void render_fltk::line_to(float x, float y)
 {
-    fl_line(last_x_, last_y_, (int)x, (int)y);
-    last_x_ = (int)x;
-    last_y_ = (int)y;
+    fl_line(last_x_, last_y_, static_cast<int>(x), static_cast<int>(y));
+    last_x_ = static_cast<int>(x);
+    last_y_ = static_cast<int>(y);
 }
 
 std::tuple<float, float> render_fltk::get_size()
@@ -32,37 +49,41 @@ std::tuple<float, float> render_fltk::get_size()
 
 void render_fltk::draw_rect(float l_x, float l_y, float r_x, float r_y, bool fill, float radius)
 {
-    // if (radius > 0) {
-    //     if (fill)
-    //         ctx_->canvas.fill_round_rect({l_x, l_y, r_x, r_y}, radius);
-    //     else
-    //         ctx_->canvas.add_round_rect({l_x, l_y, r_x, r_y}, radius);
-    // }
-    // else {
-    //     if (fill)
-    //         ctx_->canvas.fill_rect({l_x, l_y, r_x, r_y});
-    //     else
-    //         ctx_->canvas.add_rect({l_x, l_y, r_x, r_y});
-    // }
+    auto x = static_cast<int>(l_x);
+    auto y = static_cast<int>(l_y);
+    auto w = static_cast<int>(r_x - l_x);
+    auto h = static_cast<int>(r_y - l_y);
+
+    if (radius > 0) {
+        if (fill)
+            fl_rounded_rectf(x, y, w, h, (int)radius);
+        else
+            fl_rounded_rect(x, y, w, h, radius);
+    }
+    else {
+        if (fill)
+            fl_rectf(x, y, w, h, last_color_);
+        else
+            fl_rect(x, y, w, h);
+    }
 }
 
 void render_fltk::begin_line_style(float width, irender::colors color)
 {
-    // ctx_->canvas.line_width(width);
-    // ctx_->canvas.stroke_style(get_color(color));
+    set_fg_color(color);
+    fl_line_style(FL_SOLID, static_cast<int>(width));
 }
 
 void render_fltk::set_text_style(float font_size, irender::colors color)
 {
-    // ctx_->canvas.font_size(font_size);
-    // ctx_->canvas.fill_style(get_color(color));
+    fl_font(font_, static_cast<Fl_Fontsize>(font_size));
 }
 
 void render_fltk::set_text_justify(int h, int v) {}
 
 void render_fltk::draw_text(float x, float y, const char* text)
 {
-    // ctx_->canvas.fill_text(text, {x, y});
+    fl_draw(text, static_cast<int>(x), static_cast<int>(y));
 }
 
 void render_fltk::swap_buffer() {}
@@ -74,13 +95,12 @@ void render_fltk::end_line_style()
 
 std::tuple<float, float, float, float> render_fltk::get_bounds()
 {
-    // auto [x, y, h, w] = ctx_->bounds;
     return std::make_tuple(x_, y_, x_ + w_, y_ + h_);
 }
 
 void render_fltk::refresh_view()
 {
-    // ctx_->view.refresh(ctx_->bounds);
+    fl_redraw_object(parent_);
 }
 
 constexpr Fl_Color render_fltk::get_color(colors color)
@@ -88,8 +108,8 @@ constexpr Fl_Color render_fltk::get_color(colors color)
     Fl_Color cr = FL_DARK1;
     switch (color) {
     case colors::BLACK: cr = FL_BLACK; break;
-    case colors::DARKGRAY: cr = FL_GRAY0; break;
-    case colors::LIGHTGRAY: cr = FL_GRAY; break;
+    case colors::DARKGRAY: cr = fl_rgb_color(47, 79, 79); break;
+    case colors::LIGHTGRAY: cr = fl_rgb_color(168, 168, 168); break;
     case colors::WHITE: cr = FL_WHITE; break;
     case colors::RED: cr = FL_RED; break;
     case colors::GREEN: cr = FL_GREEN; break;
@@ -97,10 +117,10 @@ constexpr Fl_Color render_fltk::get_color(colors color)
     case colors::BLUE: cr = FL_BLUE; break;
     case colors::CYAN: cr = FL_CYAN; break;
     case colors::LIGHT_BLUE: cr = FL_BLUE; break;
-    case colors::BROWN: cr = FL_DARK2; break;
-    case colors::ORANGE: cr = FL_RED; break;
-    case colors::PINK: cr = FL_RED; break;
-    case colors::PURPLE: cr = FL_RED; break;
+    case colors::BROWN: cr = fl_rgb_color(165, 42, 42); break;
+    case colors::ORANGE: cr = fl_rgb_color(255, 140, 0); break;
+    case colors::PINK: cr = fl_rgb_color(255, 20, 147); break;
+    case colors::PURPLE: cr = fl_rgb_color(147, 112, 219); break;
     default: break;
     }
     return cr;
