@@ -24,17 +24,13 @@ public:
         , plot_{sploter_factory::create()}
         , render_{std::make_unique<render_fltk>()}
     {}
-    virtual void draw() override
-    {
-        // fl_color(10);
-        render_context ctx = {x(), y(), w(), h()};
-        plot_->draw(render_->init(&ctx));
-    }
+    void draw() override;
 
     void plot();
     void plot_more();
 
     auto manipulator() const { return plot_.get(); }
+    int  handle(int event) override;
 
 private:
     std::unique_ptr<isploter> plot_;

@@ -8,13 +8,14 @@
 #include <FL/fl_draw.H>
 
 render_fltk::~render_fltk() = default;
-irender* render_fltk::init(const void* context)
+irender*      render_fltk::init(const void* context)
 {
     auto ctx = (render_context*)(context);
     x_       = ctx->x;
     y_       = ctx->y;
     w_       = ctx->w;
     h_       = ctx->h;
+    parent_  = ctx->widget;
     return this;
 }
 
@@ -117,7 +118,7 @@ constexpr Fl_Color render_fltk::get_color(colors color)
     case colors::YELLOW: cr = FL_YELLOW; break;
     case colors::BLUE: cr = FL_BLUE; break;
     case colors::CYAN: cr = FL_CYAN; break;
-    case colors::LIGHT_BLUE: cr = FL_BLUE; break;
+    case colors::LIGHT_BLUE: cr = 	fl_rgb_color(173, 216, 230); break;
     case colors::BROWN: cr = fl_rgb_color(165, 42, 42); break;
     case colors::ORANGE: cr = fl_rgb_color(255, 140, 0); break;
     case colors::PINK: cr = fl_rgb_color(255, 20, 147); break;

@@ -65,5 +65,6 @@ private:
 struct render_context
 {
     int x, y, w, h;
+    Fl_Widget* widget;
 };
 #endif   // RENDER_FLTK_H
