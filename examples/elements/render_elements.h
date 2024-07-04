@@ -32,8 +32,6 @@ public:
 
     void line_to(float x, float y) override;
 
-    std::tuple<float, float> get_size() override;
-
     void draw_rect(float l_x, float l_y, float r_x, float r_y, bool fill, float radius) override;
 
     void begin_line_style(float width, irender::colors color) override;

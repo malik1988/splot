@@ -25,12 +25,6 @@ void render_elements::line_to(float x, float y)
     ctx_->canvas.line_to({x, y});
 }
 
-std::tuple<float, float> render_elements::get_size()
-{
-    auto [w, h] = ctx_->bounds.size();
-    return std::make_tuple(h, w);
-}
-
 void render_elements::draw_rect(float l_x, float l_y, float r_x, float r_y, bool fill, float radius)
 {
     if (radius > 0) {

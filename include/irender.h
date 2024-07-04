@@ -60,12 +60,6 @@ public:
 
     virtual void line_to(float x, float y) = 0;
 
-    /**
-     *  get the width and height of the draw area
-     * @return width,height
-     */
-    virtual std::tuple<float, float> get_size() = 0;
-
     virtual void draw_rect(float l_x, float l_y, float r_x, float r_y, bool fill, float radius) = 0;
 
     /**

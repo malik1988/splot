@@ -43,11 +43,6 @@ void render_fltk::line_to(float x, float y)
     last_y_ = static_cast<int>(y);
 }
 
-std::tuple<float, float> render_fltk::get_size()
-{
-    return std::make_tuple(w_, h_);
-}
-
 void render_fltk::draw_rect(float l_x, float l_y, float r_x, float r_y, bool fill, float radius)
 {
     auto x = static_cast<int>(l_x);
