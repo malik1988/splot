@@ -4,18 +4,18 @@
 
 #pragma once
 
-#ifndef RENDER_FLTK_H
-#    define RENDER_FLTK_H
+#ifndef RENDER_NANOGUI_H
+#    define RENDER_NANOGUI_H
 
 #    include "irender.h"
-#    include <FL/Fl.H>
+#    include "nanogui/nanogui.h"
 
 using namespace splot;
-class render_fltk final : public irender
+using namespace nanogui;
+class render_nanogui final : public irender
 {
 public:
-
-    ~render_fltk() override;
+    ~render_nanogui() override;
 
     irender* init(const void* ctx) override;
 
@@ -45,18 +45,16 @@ public:
 
     void refresh_view() override;
 
+    struct RenderContext
+    {
+        float x,y,w,h;
+        NVGcontext* ctx;
+    };
 private:
-    constexpr Fl_Color get_color(irender::colors color);
-    int                last_x_, last_y_;
-    int                x_, y_, w_, h_;
-    Fl_Color           last_color_;
-    Fl_Widget*         parent_;
-    Fl_Font            font_;
+    Color get_color(irender::colors color);
+    RenderContext *context_;
 };
 
-struct render_context
-{
-    int x, y, w, h;
-    Fl_Widget* widget;
-};
-#endif   // RENDER_FLTK_H
+
+
+#endif   // RENDER_NANOGUI_H
