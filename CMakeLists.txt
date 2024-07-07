@@ -10,6 +10,28 @@ project(
         LANGUAGES CXX
 )
 
+set(sources
+        src/sploter.cpp
+        src/sploter.h
+        src/sploter_data.cpp
+        src/sploter_factory.cpp
+)
+
+set(exe_sources
+        ${sources}
+)
+
+set(headers
+        include/irender.h
+        include/isploter.h
+        include/sploter_data.h
+        include/sploter_factory.h
+)
+
+set(test_sources
+        src/tmp_test.cpp
+)
+
 #
 # Set project options
 #
@@ -59,7 +81,6 @@ include(cmake/Vcpkg.cmake)
 #
 
 # Find all headers and implementation files
-include(cmake/SourcesAndHeaders.cmake)
 
 if (${PROJECT_NAME}_BUILD_EXECUTABLE)
     add_executable(${PROJECT_NAME} ${exe_sources})
@@ -367,6 +388,5 @@ endif ()
 option(SPLOT_BUILD_EXAMPLES "Enable build Examples,default is ON" ON)
 
 if (SPLOT_BUILD_EXAMPLES)
-    set(ELEMENTS_ROOT ${PROJECT_SOURCE_DIR})
     add_subdirectory(examples)
 endif ()

@@ -220,7 +220,7 @@ bool sploter::mouse_click(irender* render, float x, float y, const bool down, co
     return true;
 }
 
-bool sploter::handle_events(irender* render, float x, float y, cursor_tracking tracking)
+bool sploter::cursor_events(irender* render, float x, float y, cursor_tracking tracking)
 {
     cursor_x_ = x, cursor_y_ = y;
     bool refresh = false;

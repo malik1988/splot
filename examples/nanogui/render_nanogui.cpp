@@ -82,22 +82,22 @@ void render_nanogui::refresh_view() {}
 Color render_nanogui::get_color(irender::colors color)
 {
     Color cr;
-    // switch (color) {
-    // case colors::BLACK: cr = Colors; break;
-    // case colors::DARKGRAY: cr = fl_rgb_color(47, 79, 79); break;
-    // case colors::LIGHTGRAY: cr = fl_rgb_color(168, 168, 168); break;
-    // case colors::WHITE: cr = FL_WHITE; break;
-    // case colors::RED: cr = FL_RED; break;
-    // case colors::GREEN: cr = FL_GREEN; break;
-    // case colors::YELLOW: cr = FL_YELLOW; break;
-    // case colors::BLUE: cr = FL_BLUE; break;
-    // case colors::CYAN: cr = FL_CYAN; break;
-    // case colors::LIGHT_BLUE: cr = 	fl_rgb_color(173, 216, 230); break;
-    // case colors::BROWN: cr = fl_rgb_color(165, 42, 42); break;
-    // case colors::ORANGE: cr = fl_rgb_color(255, 140, 0); break;
-    // case colors::PINK: cr = fl_rgb_color(255, 20, 147); break;
-    // case colors::PURPLE: cr = fl_rgb_color(147, 112, 219); break;
-    // default: break;
-    // }
+    switch (color) {
+    case colors::BLACK: cr =  Color(0,0,0,1); break;
+    case colors::DARKGRAY: cr = Color(47, 79, 79,1); break;
+    case colors::LIGHTGRAY: cr = Color(168, 168, 168,1); break;
+    case colors::WHITE: cr = Color(255,255,255,1); break;
+    case colors::RED: cr = Color(255,0,0,1); break;
+    case colors::GREEN: cr = Color(0, 255, 0,1); break;
+    case colors::YELLOW: cr = Color(255, 255, 0,1); break;
+    case colors::BLUE: cr = Color(0, 0, 255,1); break;
+    case colors::CYAN: cr = Color(0, 255, 255,1); break;
+    case colors::LIGHT_BLUE: cr = 	Color(173, 216, 230,0.8); break;
+    case colors::BROWN: cr = Color(165, 42, 42,1); break;
+    case colors::ORANGE: cr = Color(255, 140, 0,1); break;
+    case colors::PINK: cr = Color(255, 20, 147,1); break;
+    case colors::PURPLE: cr = Color(147, 112, 219,1); break;
+    default: break;
+    }
     return cr;
 }

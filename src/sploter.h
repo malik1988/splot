@@ -27,7 +27,9 @@ public:
         , x_max_{std::numeric_limits<float>::quiet_NaN()}
         , y_min_{std::numeric_limits<float>::quiet_NaN()}
         , y_max_{std::numeric_limits<float>::quiet_NaN()}
-        , axis_mark_len_{5.0}
+        , real_x_min_{std::numeric_limits<float>::quiet_NaN()}
+        , real_y_min_(std::numeric_limits<float>::quiet_NaN())
+        , axis_mark_len_{5}
         , x_scale_{1}
         , y_scale_{1}
         , x_{0}
@@ -42,7 +44,7 @@ public:
 
     void draw(irender* render) override;
 
-    bool handle_events(irender* render, float x, float y, cursor_tracking tracking) override;
+    bool cursor_events(irender* render, float x, float y, cursor_tracking tracking) override;
 
     bool mouse_click(irender* render, float x, float y, bool down, mouse_key key) override;
 

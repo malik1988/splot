@@ -22,7 +22,7 @@ void eplot::keep_tracking(context const& ctx, tracker_info& track_info)
 
 bool eplot::cursor(context const& ctx, point p, cursor_tracking status)
 {
-    return plot_->handle_events(
+    return plot_->cursor_events(
         render_->init(&ctx), p.x, p.y, static_cast<isploter::cursor_tracking>(status));
 }
 

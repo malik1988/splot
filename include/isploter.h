@@ -34,7 +34,7 @@ public:
 
     virtual void draw(irender* render) = 0;
 
-    virtual bool handle_events(irender* render, float x, float y, cursor_tracking tracking) = 0;
+    virtual bool cursor_events(irender* render, float x, float y, cursor_tracking tracking) = 0;
 
     virtual bool mouse_click(irender* render, float x, float y, bool down, mouse_key key) = 0;
 

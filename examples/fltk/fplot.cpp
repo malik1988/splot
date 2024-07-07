@@ -59,14 +59,14 @@ int fplot::handle(int event)
     bool      handled = false;
     switch (event) {
     case FL_MOVE:
-        plot_->handle_events(render_->init(&ctx), x, y, isploter::cursor_tracking::entering);
+        plot_->cursor_events(render_->init(&ctx), x, y, isploter::cursor_tracking::entering);
         handled = true;
         break;
     case FL_ENTER:
         handled = true;
         break;
     case FL_LEAVE:
-        plot_->handle_events(render_->init(&ctx), x, y, isploter::cursor_tracking::leaving);
+        plot_->cursor_events(render_->init(&ctx), x, y, isploter::cursor_tracking::leaving);
         handled = true;
         break;
 
