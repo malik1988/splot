@@ -56,18 +56,28 @@ target_link_libraries(splot_example splot::splot)
 
 ## Examples
 
+```
+tree view
+cpp
+|_ splot 
+    |_...(this project folder)
+|_ elements
+|_ fltk-1.4.x
+|_ nanogui 
+```
+
+There are some examples:
+- elements `based on elements-ui ,smooth and interactivaty`
+- fltk `based on fltk-1.4.x(cmake support), no alpha channel for colors, delays event with doubled buffer.`
+- nanogui `based on nanogui(mitsuba-renderer branch)`
+
+## Details
+
 There's an example for elements UI. 
 Please check the `SPLOT_BUILD_EXAMPLES` option to be ON (default is ON).
 
 ### Steps to build
 
-```
-tree view
-cpp
-|__splot 
-    |_...(this project folder)
-|_elements
-```
 
 1. first download [elements](https://github.com/cycfi/elements) somewhere.
    ```bash
