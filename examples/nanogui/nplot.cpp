@@ -10,6 +10,8 @@ void nplot::draw(NVGcontext* ctx)
 {
     Widget::draw(ctx);
 
+
+    nvgBeginPath(ctx);
     nvgFontFace(ctx, "sans");
     if (!caption_.empty()) {
         nvgFontSize(ctx, 14.0f);

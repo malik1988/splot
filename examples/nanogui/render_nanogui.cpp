@@ -23,7 +23,6 @@ void render_nanogui::set_fg_color(irender::colors color)
 
 void render_nanogui::move_to(float x, float y)
 {
-    nvgBeginPath(context_->ctx);
     nvgMoveTo(context_->ctx, x, y);
 }
 
@@ -36,25 +35,29 @@ void render_nanogui::draw_rect(float l_x, float l_y, float r_x, float r_y, bool 
 {
     nvgBeginPath(context_->ctx);
     if (radius > 0) {
-        nvgRoundedRect(context_->ctx, l_x, l_y, r_x, r_y, radius);
+        nvgRoundedRect(context_->ctx, l_x, l_y, r_x - l_x, r_y - l_y, radius);
     }
     else {
-        nvgRect(context_->ctx, l_x, l_y, r_x, r_y);
+        nvgRect(context_->ctx, l_x, l_y, r_x - l_x, r_y - l_y);
     }
     if (fill) {
         nvgFill(context_->ctx);
+    }
+    else {
+        nvgStroke(context_->ctx);
     }
 }
 
 void render_nanogui::begin_line_style(float width, irender::colors color)
 {
+    nvgBeginPath(context_->ctx);
     nvgStrokeColor(context_->ctx, get_color(color));
 }
 
 void render_nanogui::set_text_style(float font_size, irender::colors color)
 {
     nvgFontSize(context_->ctx, font_size);
-    nvgTextAlign(context_->ctx, NVG_ALIGN_RIGHT | NVG_ALIGN_BOTTOM);
+    nvgTextAlign(context_->ctx, NVG_ALIGN_LEFT | NVG_ALIGN_BOTTOM);
     nvgFillColor(context_->ctx, get_color(color));
 }
 
