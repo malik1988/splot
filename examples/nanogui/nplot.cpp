@@ -3,17 +3,26 @@
 //
 #include "nplot.h"
 
+#include <nanogui/opengl.h>
 #include <sstream>
-
 
 void nplot::draw(NVGcontext* ctx)
 {
     Widget::draw(ctx);
-    context_.x   = m_pos.x();
-    context_.y   = m_pos.y();
-    context_.w   = m_size.x();
-    context_.h   = m_size.y();
-    context_.ctx = ctx;
+
+    nvgFontFace(ctx, "sans");
+    if (!caption_.empty()) {
+        nvgFontSize(ctx, 14.0f);
+        nvgTextAlign(ctx, NVG_ALIGN_LEFT | NVG_ALIGN_TOP);
+        nvgFillColor(ctx, caption_color_);
+        nvgText(ctx, m_pos.x() + 3, m_pos.y() + 1, caption_.c_str(), NULL);
+    }
+    auto title_margin = 20.0f;
+    context_.x        = m_pos.x() + title_margin;
+    context_.y        = m_pos.y() + title_margin;
+    context_.w        = m_size.x() - title_margin * 2;
+    context_.h        = m_size.y() - title_margin * 2;
+    context_.ctx      = ctx;
     plot_->draw(render_->init(&context_));
 }
 void nplot::plot()

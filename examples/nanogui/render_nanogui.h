@@ -47,12 +47,13 @@ public:
 
     struct RenderContext
     {
-        float x,y,w,h;
+        float       x, y, w, h;
         NVGcontext* ctx;
     };
+
 private:
-    Color get_color(irender::colors color);
-    RenderContext *context_;
+    Color          get_color(irender::colors color);
+    RenderContext* context_;
 };
 
 

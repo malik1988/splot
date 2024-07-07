@@ -18,8 +18,10 @@ using namespace splot;
 class nplot : public Widget
 {
 public:
-    nplot(Widget* parent)
+    nplot(Widget* parent, const std::string& caption = "untitled")
         : Widget(parent)
+        , caption_{caption}
+        , caption_color_{Color(255, 140, 0, 255)}
         , plot_{sploter_factory::create()}
         , render_{std::make_unique<render_nanogui>()}
         , context_{0.0f, 0.0f, 0.0f, 0.0f, nullptr}
@@ -36,6 +38,8 @@ public:
                             int modifiers) override;
 
 private:
+    std::string                   caption_;
+    Color                         caption_color_;
     std::unique_ptr<isploter>     plot_;
     std::unique_ptr<irender>      render_;
     render_nanogui::RenderContext context_;
