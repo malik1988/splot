@@ -66,46 +66,22 @@ void nplot::plot_more()
             ss.str());
     }
 }
-int nplot::handle(int event)
-{
-    // render_context ctx = {x(), y(), w(), h(), this};
-    //
-    // const int x       = Fl::event_x();
-    // const int y       = Fl::event_y();
-    // bool      handled = false;
-    // switch (event) {
-    // case FL_MOVE:
-    //     plot_->handle_events(render_->init(&ctx), x, y, isploter::cursor_tracking::entering);
-    //     handled = true;
-    //     break;
-    // case FL_ENTER:
-    //     handled = true;
-    //     break;
-    // case FL_LEAVE:
-    //     plot_->handle_events(render_->init(&ctx), x, y, isploter::cursor_tracking::leaving);
-    //     handled = true;
-    //     break;
-    //
-    // case FL_PUSH:
-    //     plot_->mouse_click(render_->init(&ctx), x, y, true, isploter::mouse_key::left);
-    //     handled = true;
-    //     break;
-    // case FL_RELEASE:
-    //     plot_->mouse_click(render_->init(&ctx), x, y, false, isploter::mouse_key::left);
-    //     handled = true;
-    //     break;
-    // }
-    // if (handled) {
-    //     return 1;
-    // }
-    // return Fl_Widget::handle(event);
-    return 0;
-}
+
 bool nplot::mouse_button_event(const Vector2i& p, int button, bool down, int modifiers)
 {
-    return Widget::mouse_button_event(p, button, down, modifiers);
+    auto ret = Widget::mouse_button_event(p, button, down, modifiers);
+    if (button == GLFW_MOUSE_BUTTON_1)
+        return plot_->mouse_click(
+            render_->init(&context_), p.x(), p.y(), down, isploter::mouse_key::left);
+    return ret;
 }
 bool nplot::mouse_motion_event(const Vector2i& p, const Vector2i& rel, int button, int modifiers)
 {
-    return Widget::mouse_motion_event(p, rel, button, modifiers);
+    auto ret = Widget::mouse_motion_event(p, rel, button, modifiers);
+    if (button == GLFW_MOUSE_BUTTON_1)
+        return plot_->cursor_events(render_->init(&context_),
+                                    p.x(),
+                                    p.y(),
+                                    static_cast<isploter::cursor_tracking>(modifiers));
+    return ret;
 }

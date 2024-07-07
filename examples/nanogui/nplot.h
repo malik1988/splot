@@ -32,7 +32,7 @@ public:
     void plot_more();
 
     auto manipulator() const { return plot_.get(); }
-    int  handle(int event);
+
     bool mouse_button_event(const Vector2i& p, int button, bool down, int modifiers) override;
     bool mouse_motion_event(const Vector2i& p, const Vector2i& rel, int button,
                             int modifiers) override;
