@@ -101,5 +101,5 @@ Also try to make Zero(original XY) on the grid.
 
 * [x] optimize axes grid division
 * [x] port to FLTK 
-* [ ] port to nanogui 
+* [x] port to nanogui 
 * [ ] make grid/legand/markers interactions available on screen
